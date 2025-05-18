@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { List, ListItem, ListItemText, Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const Products = ({ onAddToCart }) => {
     const [products, setProducts] = useState([]);
@@ -32,6 +33,10 @@ const Products = ({ onAddToCart }) => {
             </List>
         </div>
     );
+};
+
+Products.propTypes = {
+    onAddToCart: PropTypes.func.isRequired,
 };
 
 export default Products;

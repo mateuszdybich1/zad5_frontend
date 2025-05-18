@@ -2,6 +2,7 @@ import React from 'react';
 import { List, ListItem, ListItemText, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import PropTypes from 'prop-types';
 
 const Cart = ({ cartItems, setCartItems }) => {
     const navigate = useNavigate();
@@ -37,8 +38,8 @@ const Cart = ({ cartItems, setCartItems }) => {
         <div>
             <h2>Cart</h2>
             <List>
-                {cartItems.map((item, index) => (
-                    <ListItem key={index} divider>
+                {cartItems.map((item) => (
+                    <ListItem key={item.id} divider>
                         <ListItemText
                             primary={item.name}
                             secondary={`Quantity: ${item.quantity ?? 1}`}
@@ -58,6 +59,17 @@ const Cart = ({ cartItems, setCartItems }) => {
             )}
         </div>
     );
+};
+
+Cart.propTypes = {
+    cartItems: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            name: PropTypes.string.isRequired,
+            quantity: PropTypes.number
+        })
+    ).isRequired,
+    setCartItems: PropTypes.func.isRequired,
 };
 
 export default Cart;
