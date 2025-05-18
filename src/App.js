@@ -19,7 +19,6 @@ function App() {
                 : item
         );
       } else {
-        // Nowy produkt — dodajemy z quantity = 1
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });

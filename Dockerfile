@@ -1,25 +1,16 @@
-FROM node:23.11.0-alpine AS build
-
+FROM eclipse-temurin:11-jdk AS build
 WORKDIR /app
 
-# 1) Install dependencies
-COPY package*.json ./
-RUN npm ci
-
-# 2) Copy all source files
 COPY . .
 
-ARG REACT_APP_API_HOST
-ENV REACT_APP_API_HOST=${REACT_APP_API_HOST}
+RUN chmod +x ./gradlew && \
+    ./gradlew build -x test --no-daemon
 
-# 4) Build the React app
-RUN npm run build
+FROM eclipse-temurin:11-jre
+WORKDIR /app
 
-# Stage 2: serve the static build with nginx
-FROM nginx:alpine
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Copy build output
-COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 8080
 
-EXPOSE 80
-CMD ["nginx","-g","daemon off;"]
+ENTRYPOINT ["java","-jar","app.jar"]
